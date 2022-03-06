@@ -30,6 +30,27 @@ let  score = 20;
 // No es const porque es mutable
 let highscore = 0;
 
+// Creamos función que modifica el contenido 
+// del '.message'. El parámetro es el 
+// string que se envía al DOM
+const display_message = function(message){
+    document.querySelector('.message').textContent = message;
+}
+
+// Creamos función que modifica el contenido 
+// del '.number'. El parámetro es el 
+// string que se envía al DOM
+const display_number = function(number){
+    document.querySelector('.number').textContent = number;
+}
+
+// Creamos función que modifica el 
+// '.score'. El parámetro es el 
+// string que se envía al DOM
+const display_score = function(score){
+    document.querySelector('.score').textContent = score;
+}
+
 // // SOLO PARA HACER PRUEBAS
 // // Corroboramos que sea aleatorio, 
 // // cambiando el signo de pregunta por el número
@@ -49,12 +70,12 @@ document.querySelector('.check').addEventListener('click', function(){
     // Siempre empezar por lo que NO es
     // "Si no hay numero en el input..."
     if(!guess){
-        document.querySelector('.message').textContent = '🤷‍♂️ No Number!';
+        display_message('🤷‍♂️ No Number!');
     // "De lo contrario si el número de input es igual al número secreto" 
     
     // Cuando el jugador gana
     } else if(guess === secretNumber) {
-        document.querySelector('.message').textContent = '😎 Correct Number!';
+        display_message('😎 Correct Number!');
         
         // Cambiamos el color de todo el body
         // No es necesario seleccionar la clase, solo el elemento 'body'
@@ -65,7 +86,7 @@ document.querySelector('.check').addEventListener('click', function(){
         document.querySelector('.number').style.width = '30rem';
         
         // Mostramos el número secreto 
-        document.querySelector('.number').textContent = secretNumber;
+        display_number(secretNumber);
 
         // Cuando ganas se establece el número de intento como highscore
         // Si el score es mayor que el highscore
@@ -76,37 +97,55 @@ document.querySelector('.check').addEventListener('click', function(){
             // Se reemplaza en el DOM
             document.querySelector('.highscore').textContent = highscore;
         }
-    // Cuando el número es más alto
-    } else if(guess > secretNumber){
+    // Cuando el jugador se equivoca
+    } else if(guess != secretNumber){
         // Dentro de este bloque, condicionamos el 'score'
+        // Junto con el string de '.message' que sirve para saber si 
+        // el input es muy alto o muy bajo. O si se ha perdido el juego
         if(score > 1){
-            document.querySelector('.message').textContent = '🙄 Too High!';
+            // Usamos operadores ternarios para cambiar el '.message' en el DOM 
+            display_message(guess > secretNumber ? '🙄 Too High!' : '🙄 Too Low!');
             // Disminuimos el 'score'
             score --;
             // De inmediato, cambiamos el 'score' en el DOM
-            document.querySelector('.score').textContent = score;
+            display_score(score);
         } else {
             //Cambiamos mensaje en el DOM
-            document.querySelector('.message').textContent = '😒 You lost!';
+            display_message('😒 You lost!');
             // Cambiamos el score a cero
-            document.querySelector('.score').textContent = 0;
+            display_score(0);
         }
-    // Cuando el número es más bajo
-    } else if(guess < secretNumber){
-        // Dentro de este bloque, condicionamos el 'score'
-        if(score > 1){
-            document.querySelector('.message').textContent = '🙄 Too Low!';
-            // Disminuimos el 'score'
-            score --;
-            // De inmediato, cambiamos el 'score' en el DOM
-            document.querySelector('.score').textContent = score;
-        } else {
-            //Cambiamos mensaje en el DOM
-            document.querySelector('.message').textContent = '😒 You lost!';
-            // Cambiamos el score a cero
-            document.querySelector('.score').textContent = 0;
-        }   
     }
+    // }else if(guess > secretNumber){
+    //     // Dentro de este bloque, condicionamos el 'score'
+    //     if(score > 1){
+    //         document.querySelector('.message').textContent = '🙄 Too High!';
+    //         // Disminuimos el 'score'
+    //         score --;
+    //         // De inmediato, cambiamos el 'score' en el DOM
+    //         document.querySelector('.score').textContent = score;
+    //     } else {
+    //         //Cambiamos mensaje en el DOM
+    //         document.querySelector('.message').textContent = '😒 You lost!';
+    //         // Cambiamos el score a cero
+    //         document.querySelector('.score').textContent = 0;
+    //     }
+    // // Cuando el número es más bajo
+    // } else if(guess < secretNumber){
+    //     // Dentro de este bloque, condicionamos el 'score'
+    //     if(score > 1){
+    //         document.querySelector('.message').textContent = '🙄 Too Low!';
+    //         // Disminuimos el 'score'
+    //         score --;
+    //         // De inmediato, cambiamos el 'score' en el DOM
+    //         document.querySelector('.score').textContent = score;
+    //     } else {
+    //         //Cambiamos mensaje en el DOM
+    //         document.querySelector('.message').textContent = '😒 You lost!';
+    //         // Cambiamos el score a cero
+    //         document.querySelector('.score').textContent = 0;
+    //     }   
+    // }
 });
 
 
@@ -121,11 +160,11 @@ document.querySelector('.again').addEventListener('click', function(){
     // Se vuelve a generar un número aleatorio
     secretNumber = Math.trunc(Math.random() * 20) + 1;
     // Se vuelve a colocar 'Start guessing...'
-    document.querySelector('.message').textContent = 'Start guessing...';
+    display_message('Start guessing...');
     // Se vuelve al score original
-    document.querySelector('.score').textContent = score;
+    display_score(score);
     // Se vuelve a colocar el ' ? '
-    document.querySelector('.number').textContent = '?';
+    display_number('?');
     // Se vuelve al tamaño original del cuadro del numero secreto 
     document.querySelector('.number').style.width = '15rem';
     // Se deja el cuadro de adivinar vacío
